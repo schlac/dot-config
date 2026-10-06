@@ -1,9 +1,16 @@
 # starship configuration
+# https://starship.rs/config/
+
+command_timeout = 700
 
 [status]
 disabled = false
 pipestatus = true
 symbol = ''
+
+[git_branch]
+always_show_remote = true
+format = "on [$symbol$branch(:$remote_name/$remote_branch)]($style) "
 
 [git_commit]
 commit_hash_length = 12
