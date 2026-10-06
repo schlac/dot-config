@@ -25,6 +25,7 @@
 	autocrlf = input
 	excludesfile = ~/.gitignore
 	commitGraph = true
+	abbrev = 12
 [gc]
 	writeCommitGraph = true
 [fetch]
@@ -46,7 +47,7 @@
 	b = branch
 	blame-stat = "!bb() { git ls-tree -r -z --name-only HEAD -- $* | xargs -0 -n1 git blame --line-porcelain HEAD | grep \"^author \"| sort | uniq -c | sort -nr; }; bb"
 	cc = "!c() { git commit -am \"Quick commit $(whoami)@$(hostname) $(date --iso) $*\"; }; c"
-	cite = show -s --pretty='format:%h (\"%s\")'
+	cite = log -s --pretty='format:%h (\"%s\")'
 	co = checkout
 	cr = "!git checkout -b review-$(date +'%m%d')"
 	desc = log -1 --grep=branch.description --format=format:'%b'
@@ -72,6 +73,7 @@
 	s1 = !git all status -sbu --porcelain=v1
 	s2 = !git all status -sbu --porcelain=v2
 	ts = s
+	tp = push schlameuss $(git tag -l sent/*)
 	l = log --decorate --format='%C(bold blue)%h%C(reset) %C(white)%s%C(reset) %C(dim white)%ae%C(reset)%C(auto)%d (%ar) %N'
 	ld = log --decorate --format='%C(bold blue)%(describe)%C(reset) %C(white)%s%C(reset) %C(dim white)%ae%C(reset)%C(auto)%d (%ar) %N'
 	l1 = l -1
@@ -84,7 +86,7 @@
 	lsm = !git l --stat $(git main)..
 	lr = l --show-notes=review -6
 	lg = l --graph -20
-	p = !git pull --rebase --prune && git submodule update --recursive --init --rebase --remote
+	p = !git pull --rebase && git submodule update --recursive --init --rebase --remote
 	pp = !git pull --rebase --autostash && git submodule foreach --recursive 'git pull --rebase --autostash'
 	ppp = !git pull --rebase --autostash --prune && git submodule foreach --recursive 'git pull --rebase --autostash --prune'
 	prune-all = !git remote | xargs -t -n 1 git remote prune
@@ -109,7 +111,7 @@
 	cmd = /usr/local/bin/charm merge "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
 [b4]
 	email-exclude = stable@vger.kernel.org
-	prep-perpatch-check-cmd = ./scripts/checkpatch.pl --terse --no-summary --mailback --strict --showfile
-	am-perpatch-check-cmd = ./scripts/checkpatch.pl -q --terse --no-summary --mailback --strict
+	#prep-perpatch-check-cmd = ./scripts/checkpatch.pl --terse --no-summary --strict --showfile --codespell
+	#am-perpatch-check-cmd = ./scripts/checkpatch.pl -q --terse --no-summary --strict --codespell
 [pretty]
 	fixes = Fixes: %h (\\\"%s\\\")
