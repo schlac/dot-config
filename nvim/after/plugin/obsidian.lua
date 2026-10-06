@@ -45,12 +45,11 @@ require('obsidian').setup {
       return tostring(os.date('%Y%m%d')) .. "-" .. suffix
     end,
 
-    -- wiki_link_func = function(opts)
-    --     -- behave like use_path_only = true
-    --     return string.format("[[%s]]", opts.path)
-    -- end,
-    wiki_link_func = "use_alias_only",
-    preferred_link_style = "wiki", -- Either 'wiki' or 'markdown'
+    link = {
+      style = wiki_link_alias_only,
+      -- style = wiki_link_path_only
+      -- style = wiki_link_path_prefix
+    },
 
     -- disable_frontmatter = true,
     ui = {
@@ -79,10 +78,40 @@ require('obsidian').setup {
     },
 }
 
--- jump to current month notes file
+-- jump to current month notes file, then go to today's heading (or create it)
 vim.keymap.set("n", "~", function()
     require("obsidian")
     vim.cmd.Obsidian('today')
     vim.cmd.cd('~/src/schlameuss/notes')
+
+    -- defer so the buffer is fully loaded before we inspect/modify it
+    vim.schedule(function()
+        local today = os.date('%Y-%m-%d')
+        local heading = '# ' .. today
+
+        -- search for today's heading in the buffer
+        local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+        for i, line in ipairs(lines) do
+            if line == heading then
+                -- found: jump to it
+                vim.api.nvim_win_set_cursor(0, { i, 0 })
+                return
+            end
+        end
+
+        -- not found: insert before '# TODAY'
+        for i, line in ipairs(lines) do
+            if line == '# TODAY' then
+                vim.api.nvim_buf_set_lines(0, i - 1, i - 1, false, { heading, '' })
+                vim.api.nvim_win_set_cursor(0, { i, 0 })
+                return
+            end
+        end
+
+        -- no '# TODAY' marker either: append date heading then TODAY at the end
+        local n = #lines
+        vim.api.nvim_buf_set_lines(0, n, n, false, { '', heading, '', '# TODAY' })
+        vim.api.nvim_win_set_cursor(0, { n + 2, 0 })
+    end)
 end)
 
