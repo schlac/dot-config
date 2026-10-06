@@ -1,4 +1,4 @@
 return {
     -- easy comment and uncomment
-    {"numToStr/Comment.nvim",},
+    {"numToStr/Comment.nvim", version = "*", },
 }
