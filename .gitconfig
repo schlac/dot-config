@@ -92,6 +92,7 @@
 	prune-all = !git remote | xargs -t -n 1 git remote prune
 	pickaxe = log -S
 	panic = "!panic() { ptext=$1; pname=\"../git-$(basename $(pwd))-$(date \"+%Y-%m-%dT%H%M%S\")-${ptext:=panic}.tar\"; echo \"Creating backup ($pname)...\"; tar cf \"$pname\" .; ls -l \"$pname\"; }; panic"
+	rd = "!f() { n=${3:-4}; git range-diff \"$1~$n..$1\" \"$2~$n..$2\"; }; f"
 [diff]
 	tool = code
 	indentHeuristic = true
