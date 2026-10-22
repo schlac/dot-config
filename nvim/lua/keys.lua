@@ -45,3 +45,6 @@ vim.keymap.set("n", "<leader>F", function()
     vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 end)
 
+-- close all buffers - reopen current
+vim.keymap.set("n", "<leader>o", ":%bd|e#|bd#<cr>")
+
