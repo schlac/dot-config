@@ -15,16 +15,37 @@ return {
 
         -- 2. Bootstrap your core languages (Replaces ensure_installed)
         ts.install({
-          "bash", "c", "go", "json", "lua", "make",
-          "markdown", "markdown_inline", "python", "rust",
-          "vim", "vimdoc", "yaml"
+          "bash",
+          "c",
+          "go",
+          "json",
+          "lua",
+          "make",
+          "markdown",
+          "markdown_inline",
+          "python",
+          "rust",
+          "vim",
+          "vimdoc",
+          "yaml",
+          "xml"
         })
 
         -- 3. Enable Highlighting via Native Autocommands
         vim.api.nvim_create_autocmd("FileType", {
-          pattern = { 
-            "bash", "c", "go", "json", "lua", "make", 
-            "markdown", "python", "rust", "vim", "yaml" 
+          pattern = {
+            "bash",
+            "c",
+            "go",
+            "json",
+            "lua",
+            "make",
+            "markdown",
+            "python",
+            "rust",
+            "vim",
+            "yaml",
+            "xml"
           },
           callback = function()
             vim.treesitter.start()
@@ -51,7 +72,7 @@ return {
     -- context line
     {
         "nvim-treesitter/nvim-treesitter-context", build = ":TSUpdate", version = "*",
-        setup = {
+        opts = {
             enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
             multiwindow = false, -- Enable multiwindow support.
             max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
