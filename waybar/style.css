@@ -1,0 +1,133 @@
+@define-color fg #555555;
+@define-color bg #010101;
+@define-color black #000000;
+@define-color urgent #ff1111;
+
+* {
+    border: none;
+    min-height: 0;
+    font-family: "JetBrains Nerd Font Mono";
+    font-weight: 500;
+    font-size: 14px;
+    padding: 0;
+}
+
+window#waybar {
+    background: alpha(@bg, 0.2);
+    border: 1px solid @fg;
+    border-radius: 4px;
+}
+
+tooltip {
+    background-color: @bg;
+    border: 1px solid @fg;
+    font-size: 2px;
+    color: @fg;
+}
+
+tooltip label {
+    margin: 8px;
+}
+
+#clock,
+#tray,
+#cpu,
+#memory,
+#battery,
+#network,
+#pulseaudio,
+#language {
+    margin: 6px 6px 6px 0px;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+#workspaces {
+    margin: 4px 0px 4px 4px;
+    border-radius: 4px;
+}
+
+#workspaces button {
+    all: initial;
+    min-width: 0;
+    box-shadow: inset 0 -3px transparent;
+    padding: 2px 4px;
+    color: @fg;
+    background-color: #120F19;
+    border: 1px solid @fg;
+    border-radius: 4px;
+    margin-right: 2px;
+}
+
+#workspaces button.active {
+    color: @bg;
+    background-color: #11aaaa;
+}
+
+#workspaces button.urgent {
+    background-color: @urgent;
+        color: @bg;
+        border: 1px solid @fg;
+}
+
+#clock {
+    background-color: @fg;
+    border: 1px solid #120F19;
+    color: @bg;
+}
+
+#cpu,
+#memory,
+#network,
+#pulseaudio,
+#battery,
+#tray,
+#language {
+    background-color: @bg;
+    border: 1px solid @fg;
+    color: @fg;
+}
+
+#network {
+    min-width: 100px;
+}
+
+#cpu,
+#memory,
+#battery,
+#pulseaudio {
+    min-width: 60px;
+}
+
+#cpu.critical,
+#memory.critical {
+    color: @urgent;
+    border: 1px solid @urgent;
+}
+
+#battery.warning,
+#battery.critical,
+#battery.urgent {
+    color: @urgent;
+    border: 1px solid @urgent;
+}
+
+#custom-launcher {
+    font-size: 20px;
+    padding-left: 10px;
+    padding-right: 5px;
+    transition: none;
+    color: @fg;
+}
+
+#custom-control {
+    font-size: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    transition: none;
+    color: @fg;
+}
+
+#language {
+    min-width: 16px;
+}
