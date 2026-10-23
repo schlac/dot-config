@@ -1,22 +1,61 @@
 return {
     -- fuzzy finder
-    {"junegunn/fzf", build = "./install --all", version = "*"},
-    -- fzf fuzzy finder (use ^, $ and ' for anchored and exact matches)
-    -- {"junegunn/fzf.vim", lazy = false, dependencies = { "junegunn/fzf" }},
+    { "junegunn/fzf", build = "./install --all", version = "*", },
     {
         "ibhagwan/fzf-lua",
         lazy = false,
         dependencies = { "junegunn/fzf", "nvim-tree/nvim-web-devicons" },
-        config = function()
+        keys = {
+            { "<leader>p",  "<cmd>Files<cr>",                                                              desc = "fuzzy find files" },
+            { "<leader>b",  "<cmd>Buffers<cr>",                                                            desc = "show open buffers" },
+            { "<leader>gg", "<cmd>Rg<cr>",                                                                 desc = "grep in files" },
+            { "<leader>g",  function() require("fzf-lua").grep({ search = vim.fn.expand("<cword>") }) end, desc = "grep word under cursor" },
+            { "<leader>f",  function() require("fzf-lua").tags({ query = vim.fn.expand("<cword>") }) end,  desc = "jump to tag under cursor" },
+        },
+        opts = {
+            -- base profile (hides the prompt decoration)
+            [1] = "default-prompt",
+            desc = "fzf.vim like config",
+            winopts = {
+                -- preview = { vertical = "down:80%", },
+                treesitter = {
+                    enabled = false,
+                },
+            },
+            fzf_opts = {
+                -- nullify fzf-lua's settings to inherit from FZF_DEFAULT_OPTS
+                ["--info"]   = false,
+                ["--layout"] = false,
+            },
+            files = {
+                cmd = os.getenv("FZF_DEFAULT_COMMAND"),
+                cwd_prompt = true,
+                cwd_prompt_shorten_len = 1,
+            },
+        },
+        config = function(_, opts)
             local fzf_lua = require("fzf-lua")
             local actions = fzf_lua.actions
             local utils = fzf_lua.utils
 
+            -- actions reference fzf_lua.actions so must be added here, not in opts
+            opts.actions = {
+                files = {
+                    ["enter"]  = actions.file_edit_or_qf,
+                    ["ctrl-x"] = actions.file_split,
+                    ["ctrl-v"] = actions.file_vsplit,
+                    ["ctrl-t"] = actions.file_tabedit,
+                    ["alt-q"]  = actions.file_sel_to_qf,
+                    ["alt-l"]  = actions.file_sel_to_ll,
+                },
+            }
+
+            fzf_lua.setup(opts)
+
+            -- register fzf.vim-compatible user commands
             local function cmd_exists(cmd)
                 local ret = vim.fn.exists(":" .. cmd)
-                if type(ret) == "number" and ret ~= 0 then
-                    return true
-                end
+                return type(ret) == "number" and ret ~= 0
             end
 
             local function setup_commands(no_override, prefix)
@@ -56,37 +95,6 @@ return {
             end
 
             setup_commands()
-
-            fzf_lua.setup{
-                { "default-prompt", "hide" }, -- base profile
-                desc = "fzf.vim like config",
-                winopts = {
-                    -- preview = { vertical = "down:80%", },
-                    treesitter = {
-                        enabled = false,
-                    },
-                },
-                fzf_opts = {
-                    -- nullify fzf-lua's settings to inherit from FZF_DEFAULT_OPTS
-                    ["--info"]   = false,
-                    ["--layout"] = false,
-                },
-                actions = {
-                    files = {
-                        ["enter"]  = actions.file_edit_or_qf,
-                        ["ctrl-x"] = actions.file_split,
-                        ["ctrl-v"] = actions.file_vsplit,
-                        ["ctrl-t"] = actions.file_tabedit,
-                        ["alt-q"]  = actions.file_sel_to_qf,
-                        ["alt-l"]  = actions.file_sel_to_ll,
-                    },
-                },
-                files = {
-                    cmd = os.getenv("FZF_DEFAULT_COMMAND"),
-                    cwd_prompt = true,
-                    cwd_prompt_shorten_len = 1,
-                },
-            }
         end,
     },
 }

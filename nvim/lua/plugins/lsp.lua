@@ -143,7 +143,7 @@ local function on_lsp_attach(ev)
     end)
 
     map({ 'n', 'x', 'v' }, '<space>ca', vim.lsp.buf.code_action)
-    map({ 'n', 'x', 'v' }, '<space>f', function()
+    map({ 'n', 'x', 'v' }, 'cf', function()
         vim.lsp.buf.format { async = true }
     end)
 end
